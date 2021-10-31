@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./App.css";
-import max_data from "./max.json";
 import { getHsl, getSeconds } from "./helpers";
 import { Laps } from "./helpers";
 
@@ -18,10 +17,10 @@ const Column = ({ laps, range, driver }: ColumnProps) => {
         <p>
           <span
             style={{
-              backgroundColor: getHsl(getSeconds(lap.Timings[0].time), range),
+              backgroundColor: getHsl(getSeconds(lap), range),
             }}
           >
-            {lap.Timings[0].time}
+            {lap}
           </span>{" "}
           {/* <span>{getSeconds(lap.Timings[0].time)}</span> */}
         </p>

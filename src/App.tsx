@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import "./App.css";
-import max_data from "./max.json";
-import lh_data from "./hamilton.json";
+import us_data from "./test.json";
 import { getMean, getMedian, getRange, getHsl, getSeconds } from "./helpers";
 import Column from "./Column";
 import { Laps, RangeArray } from "./helpers";
 
-function App() {
-  const [maxLaps] = useState<Laps>(max_data.MRData.RaceTable.Races[0].Laps);
-  const [maxRange] = useState<RangeArray>(getRange(maxLaps));
+interface Test {
+  [index:string]: string[]
+}
 
-  const [lhLaps] = useState<Laps>(lh_data.MRData.RaceTable.Races[0].Laps);
-  const [lhRange] = useState<RangeArray>(getRange(lhLaps));
+function App() {
+  const [usData] = useState<Test>(us_data.data);
+  const [range] = useState<RangeArray>(getRange(Object.values(usData).flat()));
 
   return (
     <div>
       <header>
-        <h1>f1 matrix</h1>
+        <h1>f1 heat map (2021 United States Grand Prix)</h1>
         {/* <h3>
           mean: {getMean(maxLaps.map((lap) => getSeconds(lap.Timings[0].time)))}
         </h3>
@@ -26,8 +26,7 @@ function App() {
         </h3> */}
       </header>
       <div className="columns-wrapper">
-        <Column laps={maxLaps} range={maxRange} driver={"MAX"} />
-        <Column laps={lhLaps} range={lhRange} driver={"HAM"} />
+        {Object.keys(usData).map(driver => <Column laps={usData[driver]} range={range} driver={driver} />)}
       </div>
     </div>
   );

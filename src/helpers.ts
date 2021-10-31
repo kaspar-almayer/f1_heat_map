@@ -1,15 +1,7 @@
 export type RangeArray = Array<number>;
 
-export type Laps = {
-    number: string,
-    Timings: {
-        driverId: string,
-        position: string,
-        time: string
-      }[]
-  }[]
+export type Laps = Array<string>
 
-//export type Laps = Array<Lap>
 
 
 
@@ -26,7 +18,7 @@ export const getHsl = (value: number, range: RangeArray) => {
   if (value < range[0] || value > range[1]) {
     return `hsl(0, 0%, 50%)`;
   }
-  const hue = ((value - range[0]) * 100) / (range[1] - range[0]);
+  const hue = ((value - range[0]) * 150) / (range[1] - range[0]);
   return `hsl(${hue}, 100%, 50%)`;
 };
 
@@ -44,11 +36,10 @@ export const getMedian = (laps: Array<number>): number => {
   }
 };
 
-export const getRange = (laps: Array<any>): RangeArray => {
-  //const median = getMedian(laps.map((lap) => getSeconds(lap.Timings[0].time)));
+export const getRange = (laps: Array<string>): RangeArray => {
   const timses = laps
-    .map((lap) => getSeconds(lap.Timings[0].time))
-    .filter((time) => time < 100 + 5);
+    .map((lap) => getSeconds(lap))
+    .filter((time) => time < 100 + 10);
   console.log([Math.min(...timses), Math.max(...timses)]);
   return [Math.min(...timses), Math.max(...timses)];
 };
