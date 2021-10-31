@@ -1,0 +1,17 @@
+.columns-wrapper {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.column p {
+  margin: 0;
+}
+
+.driver-name {
+  font-weight: bold;
+  text-align: center;
+}
