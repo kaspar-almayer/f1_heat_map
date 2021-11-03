@@ -7,9 +7,10 @@ type ColumnProps = {
   laps: Laps;
   range: Array<number>;
   driver: string;
+  colors: string;
 };
 
-const Column = ({ laps, range, driver }: ColumnProps) => {
+const Column = ({ laps, range, driver, colors }: ColumnProps) => {
   return (
     <div className="column">
       <p className="driver-name">{driver}</p>
@@ -17,12 +18,11 @@ const Column = ({ laps, range, driver }: ColumnProps) => {
         <p>
           <span
             style={{
-              backgroundColor: getHsl(getSeconds(lap), range),
+              backgroundColor: getHsl(getSeconds(lap), range, colors),
             }}
           >
             {lap}
           </span>{" "}
-          {/* <span>{getSeconds(lap.Timings[0].time)}</span> */}
         </p>
       ))}
     </div>

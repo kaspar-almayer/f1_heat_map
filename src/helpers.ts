@@ -14,11 +14,11 @@ export const getSeconds = (time: String): number => {
   return Number(`${sec}.${splitMiliseconds[1]}`);
 };
 
-export const getHsl = (value: number, range: RangeArray) => {
+export const getHsl = (value: number, range: RangeArray, colors: string) => {
   if (value < range[0] || value > range[1]) {
     return `hsl(0, 0%, 50%)`;
   }
-  const hue = ((value - range[0]) * 150) / (range[1] - range[0]);
+  const hue = ((value - range[0]) * Number(colors)) / (range[1] - range[0]);
   return `hsl(${hue}, 100%, 50%)`;
 };
 
