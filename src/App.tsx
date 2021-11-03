@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import "./App.css";
-import us_data from "./test.json";
+import us_data from "./turkish_gp.json";
 import { getMean, getMedian, getRange, getHsl, getSeconds } from "./helpers";
 import Column from "./Column";
 import { Laps, RangeArray } from "./helpers";
 
-interface Test {
-  [index:string]: string[]
-}
+type RaceData = {
+  driver: string,
+  timings: string[]
+}[]
 
 function App() {
-  const [usData] = useState<Test>(us_data.data);
-  const [range] = useState<RangeArray>(getRange(Object.values(usData).flat()));
+  const [usData] = useState<RaceData>(us_data.data);
+  const [range] = useState<RangeArray>(getRange(usData.map(el => el.timings).flat()));
 
   return (
     <div>
@@ -26,7 +27,7 @@ function App() {
         </h3> */}
       </header>
       <div className="columns-wrapper">
-        {Object.keys(usData).map(driver => <Column laps={usData[driver]} range={range} driver={driver} />)}
+        {usData.map(el => <Column laps={el.timings} range={range} driver={el.driver} />)}
       </div>
     </div>
   );
