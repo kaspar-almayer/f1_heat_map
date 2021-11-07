@@ -6,7 +6,6 @@ export type Laps = Array<string>
 
 
 export const getSeconds = (time: String): number => {
-  console.log("get seconds");
   const splitSeconds = time.split(":");
   const splitMiliseconds = splitSeconds[1].split(".");
 
@@ -28,7 +27,7 @@ export const getMean = (laps: Array<number>) => {
 
 export const getMedian = (laps: Array<number>): number => {
   laps.sort((a, b) => a - b);
-  if (laps.length % 2 == 0) {
+  if (laps.length % 2 === 0) {
     const middle = laps.length / 2;
     return (laps[middle - 1] + laps[middle]) / 2;
   } else {
@@ -36,11 +35,14 @@ export const getMedian = (laps: Array<number>): number => {
   }
 };
 
-export const getRange = (laps: Array<string>): RangeArray => {
-  const timses = laps
+export const getRange = (laps: Array<string>, cutout: number): RangeArray => {
+  const timsesInSeconds = laps
     .map((lap) => getSeconds(lap))
-    .filter((time) => time < 100 + 10);
-  console.log([Math.min(...timses), Math.max(...timses)]);
-  return [Math.min(...timses), Math.max(...timses)];
+
+  const median = getMedian(timsesInSeconds)
+
+  const timesWthoutPitstops = timsesInSeconds
+    .filter((time) => time < median + cutout);
+  return [Math.min(...timesWthoutPitstops), Math.max(...timesWthoutPitstops)];
 };
 

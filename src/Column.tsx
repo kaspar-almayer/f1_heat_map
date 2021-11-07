@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import { getHsl, getSeconds } from "./helpers";
 import { Laps } from "./helpers";
@@ -14,8 +14,8 @@ const Column = ({ laps, range, driver, colors }: ColumnProps) => {
   return (
     <div className="column">
       <p className="driver-name">{driver}</p>
-      {laps.map((lap) => (
-        <p>
+      {laps.map((lap, index) => (
+        <p key={index}>
           <span
             style={{
               backgroundColor: getHsl(getSeconds(lap), range, colors),
