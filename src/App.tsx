@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./App.css";
 import us_data from "./us_gp.json";
-import { getRange } from "./helpers";
+import turkish_data from "./turkish_gp.json";
+import { getRange, getMedian, getSeconds } from "./helpers";
 import Column from "./Column";
 import { RangeArray } from "./helpers";
 
@@ -10,11 +11,39 @@ type RaceData = {
   timings: string[];
 }[];
 
+type Race = {
+  name: string;
+  fullName: string;
+  data: RaceData;
+};
+
+const races = [
+  {
+    name: "us_gp",
+    fullName: "United States Grand Prix",
+    data: us_data.data,
+  },
+  {
+    name: "turkish_gp",
+    fullName: "Turkish Grand Prix",
+    data: turkish_data.data,
+  },
+];
+
+const calculateCutout = (laps: Array<string>, cutout: number) => {
+  console.log("get range");
+  const timsesInSeconds = laps.map((lap) => getSeconds(lap));
+
+  const median = getMedian(timsesInSeconds);
+  console.log(median);
+  return median + cutout;
+};
+
 function App() {
   const [cutout, setCutout] = useState("7");
-  const [usData] = useState<RaceData>(us_data.data);
+  const [raceData, setRaceData] = useState<Race>(races[0]);
   const [range, setRange] = useState<RangeArray>(
-    getRange(usData.map((el) => el.timings).flat(), Number(cutout))
+    getRange(raceData.data.map((el) => el.timings).flat(), Number(cutout))
   );
   const [colors, setColors] = useState("150");
 
@@ -24,13 +53,45 @@ function App() {
   const handleCutoutChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //console.log(event?.currentTarget?.value);
     setCutout(event?.currentTarget?.value);
-    setRange(getRange(usData.map((el) => el.timings).flat(), Number(cutout)));
+    setRange(
+      getRange(raceData.data.map((el) => el.timings).flat(), Number(cutout))
+    );
   };
+
+  const handleRaceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(event?.currentTarget?.value);
+    const selectedRace = races.find(
+      (race) => race.name === event?.currentTarget?.value
+    ) || { name: "", fullName: "", data: [] };
+    setRaceData(selectedRace);
+  };
+
+  const excludedTimes = useMemo(
+    () =>
+      calculateCutout(
+        raceData.data.map((el) => el.timings).flat(),
+        Number(cutout)
+      ),
+    [raceData, cutout]
+  );
 
   return (
     <div>
-      <header>
-        <h1>f1 heat map (2021 United States Grand Prix)</h1>
+      <header className="main-header">
+        <h1>f1 heat map ({raceData.fullName})</h1>
+        <div className="settings-input">
+          <label htmlFor="races">select race:</label>
+          <select
+            name="races"
+            id="races"
+            value={raceData.name}
+            onChange={handleRaceChange}
+          >
+            {races.map((race) => (
+              <option value={race.name}>{race.name}</option>
+            ))}
+          </select>
+        </div>
       </header>
       <div className="settings-wrapper">
         <div className="settings-input">
@@ -44,7 +105,7 @@ function App() {
           ></input>
         </div>
         <div className="settings-input">
-          <label>adjust cutout time:</label>
+          <label>exclued times over: {excludedTimes}</label>
           <input
             type="range"
             min="1"
@@ -55,7 +116,7 @@ function App() {
         </div>
       </div>
       <div className="columns-wrapper">
-        {usData.map((el, index) => (
+        {raceData.data.map((el, index) => (
           <Column
             key={index}
             laps={el.timings}

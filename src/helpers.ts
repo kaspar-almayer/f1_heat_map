@@ -13,6 +13,14 @@ export const getSeconds = (time: String): number => {
   return Number(`${sec}.${splitMiliseconds[1]}`);
 };
 
+export const getTime = (time: String): string => {
+  const splitSeconds = time.split(":");
+  const splitMiliseconds = splitSeconds[1].split(".");
+
+  const sec = Number(splitSeconds[0]) * 60 + Number(splitMiliseconds[0]);
+  return `${sec}.${splitMiliseconds[1]}`;
+}; 
+
 export const getHsl = (value: number, range: RangeArray, colors: string) => {
   if (value < range[0] || value > range[1]) {
     return `hsl(0, 0%, 50%)`;
@@ -31,18 +39,23 @@ export const getMedian = (laps: Array<number>): number => {
     const middle = laps.length / 2;
     return (laps[middle - 1] + laps[middle]) / 2;
   } else {
-    return laps.length / 2;
+    console.log("else")
+    return laps[Math.round(laps.length / 2)];
   }
 };
 
 export const getRange = (laps: Array<string>, cutout: number): RangeArray => {
+  console.log("get range")
   const timsesInSeconds = laps
     .map((lap) => getSeconds(lap))
 
   const median = getMedian(timsesInSeconds)
+  console.log(median)
 
   const timesWthoutPitstops = timsesInSeconds
     .filter((time) => time < median + cutout);
+
+    console.log([Math.min(...timesWthoutPitstops), Math.max(...timesWthoutPitstops)])
   return [Math.min(...timesWthoutPitstops), Math.max(...timesWthoutPitstops)];
 };
 
