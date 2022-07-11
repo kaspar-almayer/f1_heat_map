@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from "react";
 import "./App.css";
-import us_data from "./us_gp.json";
-import turkish_data from "./turkish_gp.json";
 import { getRange, getMedian, getSeconds } from "./helpers";
 import Column from "./Column";
 import { RangeArray } from "./helpers";
+//import { supabase } from "./supabaseClient";
+
+import data_8 from "./race_data/8.json";
+import data_9 from "./race_data/9.json";
 
 type RaceData = {
   driver: string;
@@ -19,14 +21,14 @@ type Race = {
 
 const races = [
   {
-    name: "us_gp",
-    fullName: "United States Grand Prix",
-    data: us_data.data,
+    name: "Azerbaijan GP",
+    fullName: data_8.raceName,
+    data: data_8.data,
   },
   {
-    name: "turkish_gp",
-    fullName: "Turkish Grand Prix",
-    data: turkish_data.data,
+    name: "Canada GP",
+    fullName: data_9.raceName,
+    data: data_9.data,
   },
 ];
 
@@ -46,15 +48,36 @@ function App() {
     getRange(raceData.data.map((el) => el.timings).flat(), Number(cutout))
   );
   const [colors, setColors] = useState("150");
+  const [fontSize, setFontSize] = useState("14");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // useEffect(() => {
+  //   console.log("effect");
+  //   const getData = async () => {
+  //     try {
+  //       let { data: races, error } = await supabase.from("races").select("*");
+  //       console.log({ races });
+  //       setRaces(races);
+  //       setRaceData(races[0]);
+  //     } catch (error) {}
+  //   };
+
+  //   getData();
+  // }, []);
+
+  // useEffect(() => {
+  //   raceData &&
+  //     getRange(raceData.data.map((el) => el.timings).flat(), Number(cutout));
+  // }, [raceData]);
+
+  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColors(event?.currentTarget?.value);
   };
   const handleCutoutChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //console.log(event?.currentTarget?.value);
     setCutout(event?.currentTarget?.value);
     setRange(
-      getRange(raceData.data.map((el) => el.timings).flat(), Number(cutout))
+      raceData &&
+        getRange(raceData.data.map((el) => el.timings).flat(), Number(cutout))
     );
   };
 
@@ -75,11 +98,15 @@ function App() {
     [raceData, cutout]
   );
 
+  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFontSize(event?.currentTarget?.value);
+  };
+
   return (
-    <div>
+    <div className="app-wrapper">
       <header className="main-header">
         <h1>f1 heat map ({raceData.fullName})</h1>
-        <div className="settings-input">
+        <div className="race-input">
           <label htmlFor="races">select race:</label>
           <select
             name="races"
@@ -93,39 +120,53 @@ function App() {
           </select>
         </div>
       </header>
-      <div className="settings-wrapper">
-        <div className="settings-input">
-          <label>adjust colors:</label>
-          <input
-            type="range"
-            min="0"
-            max="300"
-            value={colors}
-            onChange={handleChange}
-          ></input>
+      <main>
+        <div className="settings-wrapper">
+          <div className="settings-input">
+            <label>adjust colors:</label>
+            <input
+              type="range"
+              min="0"
+              max="300"
+              value={colors}
+              onChange={handleColorChange}
+            ></input>
+          </div>
+          <div className="settings-input">
+            <label>exclued times over: {excludedTimes}</label>
+            <input
+              type="range"
+              min="1"
+              max="30"
+              value={cutout}
+              onChange={handleCutoutChange}
+            ></input>
+          </div>
+
+          <div className="settings-input">
+            <label>heat map size: {fontSize}</label>
+            <input
+              type="range"
+              min="7"
+              max="20"
+              value={fontSize}
+              onChange={handleSizeChange}
+            ></input>
+          </div>
         </div>
-        <div className="settings-input">
-          <label>exclued times over: {excludedTimes}</label>
-          <input
-            type="range"
-            min="1"
-            max="30"
-            value={cutout}
-            onChange={handleCutoutChange}
-          ></input>
+        <div className="columns-wrapper">
+          {raceData.data.map((el, index) => (
+            <Column
+              key={index}
+              laps={el.timings}
+              range={range}
+              driver={el.driver}
+              colors={colors}
+              fontSize={fontSize}
+            />
+          ))}
         </div>
-      </div>
-      <div className="columns-wrapper">
-        {raceData.data.map((el, index) => (
-          <Column
-            key={index}
-            laps={el.timings}
-            range={range}
-            driver={el.driver}
-            colors={colors}
-          />
-        ))}
-      </div>
+      </main>
     </div>
   );
 }

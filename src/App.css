@@ -1,10 +1,18 @@
 .main-header {
   display: flex;
   align-items: center;
+  border-bottom: 2px solid gray;
+  margin-bottom: 30px;
+  padding: 10px 50px;
 }
 .main-header h1 {
   margin-right: 30px;
 }
+
+main {
+  display: flex;
+}
+
 
 .columns-wrapper {
   display: flex;
@@ -17,6 +25,7 @@
 
 .column p {
   margin: 0;
+  padding: .2em;
 }
 
 .driver-name {
@@ -26,15 +35,19 @@
 
 .settings-wrapper {
   display: flex;
-  margin-bottom: 20px;
+  flex-direction: column;
+  margin-left: 50px;
 }
 
 .settings-input {
-  display: flex;
-  align-items: center;
-  margin-right: 30px;
+  margin-top: 30px;
+  margin-right: 100px;
 }
 
 .settings-input label {
-  margin-right: 15px;
+  display: block;
+}
+
+.race-input label{
+  margin-right: 20px;
 }
