@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   border-bottom: 2px solid gray;
-  margin-bottom: 30px;
   padding: 10px 50px;
 }
 .main-header h1 {
@@ -11,11 +10,13 @@
 
 main {
   display: flex;
+  margin-top: 30px;
 }
 
 
 .columns-wrapper {
   display: flex;
+  margin-bottom: 50px;
 }
 
 .column {

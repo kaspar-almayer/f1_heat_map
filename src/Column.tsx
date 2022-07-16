@@ -1,10 +1,9 @@
 import React from "react";
 import "./App.css";
 import { getHsl, getSeconds } from "./helpers";
-import { Laps } from "./helpers";
 
 type ColumnProps = {
-  laps: Laps;
+  laps: string[];
   range: Array<number>;
   driver: string;
   colors: string;

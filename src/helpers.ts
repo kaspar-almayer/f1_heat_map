@@ -1,8 +1,3 @@
-export type RangeArray = Array<number>;
-
-export type Laps = Array<string>
-
-
 
 
 export const getSeconds = (time: String): number => {
@@ -21,7 +16,7 @@ export const getTime = (time: String): string => {
   return `${sec}.${splitMiliseconds[1]}`;
 }; 
 
-export const getHsl = (value: number, range: RangeArray, colors: string) => {
+export const getHsl = (value: number, range: number[], colors: string) => {
   if (value < range[0] || value > range[1]) {
     return `hsl(0, 0%, 50%)`;
   }
@@ -44,13 +39,13 @@ export const getMedian = (laps: Array<number>): number => {
   }
 };
 
-export const getRange = (laps: Array<string>, cutout: number): RangeArray => {
+export const getRange = (laps: Array<string>, cutout: number): number[] => {
   console.log("get range")
   const timsesInSeconds = laps
     .map((lap) => getSeconds(lap))
 
   const median = getMedian(timsesInSeconds)
-  console.log(median)
+  console.log({median})
 
   const timesWthoutPitstops = timsesInSeconds
     .filter((time) => time < median + cutout);
