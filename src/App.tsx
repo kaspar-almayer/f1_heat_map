@@ -1,35 +1,21 @@
 import React, { useState, useMemo, useEffect } from "react";
+
 import "./App.css";
-import { getRange, getMedian, getSeconds } from "./helpers";
+import {
+  getRange,
+  getMedian,
+  getSeconds,
+  formatTime,
+  flatLapTimes,
+} from "./helpers";
 import Column from "./Column";
 import { supabase } from "./supabaseClient";
-
-type TimingsData = {
-  driver: string;
-  driverId: string;
-  timings: string[];
-}[];
-
-type Race = {
-  created_at: string;
-  id: number;
-  race_name: string;
-  round: number;
-  short_name: string;
-  data: TimingsData;
-};
-
-type RacesList = {
-  id: number;
-  short_name: string;
-}[];
+import { Race, RacesList } from "./types";
 
 const calculateCutout = (laps: Array<string>, cutout: number) => {
-  console.log("get range");
-  const timsesInSeconds = laps.map((lap) => getSeconds(lap));
+  const timsesInSeconds = laps.map((lapTime) => getSeconds(lapTime));
 
-  const median = getMedian(timsesInSeconds);
-  console.log(median);
+  const median = Math.round(getMedian(timsesInSeconds));
   return median + cutout;
 };
 
@@ -43,20 +29,18 @@ function App() {
   const [fontSize, setFontSize] = useState("14");
 
   useEffect(() => {
-    console.log("effect");
     const getData = async () => {
       try {
         let { data: races, error } = await supabase
           .from("races")
           .select("*")
-          .eq("round", "8");
+          .eq("round", "11");
 
         let { data: allRaces, error: allRacesRrror } = await supabase
           .from("races")
-          .select("id,short_name");
+          .select("id,short_name")
+          .order("round", { ascending: false });
 
-        console.log({ races });
-        console.log({ allRaces });
         if (races) {
           setRace(races[0] as Race);
         }
@@ -72,33 +56,22 @@ function App() {
 
   useEffect(() => {
     if (race) {
-      setRange(
-        getRange(race.data.map((el) => el.timings).flat(), Number(cutout))
-      );
+      setRange(getRange(flatLapTimes(race), Number(cutout)));
     }
   }, [race, cutout]);
 
   const excludedTimes = useMemo(
-    () =>
-      race
-        ? calculateCutout(
-            race.data.map((el) => el.timings).flat(),
-            Number(cutout)
-          )
-        : "",
+    () => (race ? calculateCutout(flatLapTimes(race), Number(cutout)) : 0),
     [race, cutout]
   );
 
   const handleRaceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(event?.currentTarget?.value);
     const getData = async () => {
       try {
         let { data: races, error } = await supabase
           .from("races")
           .select("*")
           .eq("id", event?.currentTarget?.value);
-
-        console.log({ races });
 
         if (races) {
           setRace(races[0] as Race);
@@ -124,7 +97,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <header className="main-header">
-        <h1>f1 heat map ({race?.race_name})</h1>
+        <h1>F1 heat map | {race?.race_name}</h1>
         <div className="race-input">
           <label htmlFor="races">select race:</label>
           <select
@@ -154,7 +127,7 @@ function App() {
             ></input>
           </div>
           <div className="settings-input">
-            <label>exclued times over: {excludedTimes}</label>
+            <label>exclued times over: {formatTime(excludedTimes)}</label>
             <input
               type="range"
               min="1"
@@ -177,16 +150,19 @@ function App() {
         </div>
         {race ? (
           <div className="columns-wrapper">
-            {race.data.map((el, index) => (
-              <Column
-                key={index}
-                laps={el.timings}
-                range={range}
-                driver={el.driver}
-                colors={colors}
-                fontSize={fontSize}
-              />
-            ))}
+            {race.data.map(
+              (el, index) =>
+                el.timings && (
+                  <Column
+                    key={index}
+                    laps={el.timings}
+                    range={range}
+                    driver={el.driver}
+                    colors={colors}
+                    fontSize={fontSize}
+                  />
+                )
+            )}
           </div>
         ) : null}
       </main>

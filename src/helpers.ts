@@ -1,20 +1,18 @@
+import { Race } from "./types";
 
-
-export const getSeconds = (time: String): number => {
-  const splitSeconds = time.split(":");
+export const getSeconds = (lapTime: String): number => {
+  const splitSeconds = lapTime.split(":");
   const splitMiliseconds = splitSeconds[1].split(".");
 
   const sec = Number(splitSeconds[0]) * 60 + Number(splitMiliseconds[0]);
   return Number(`${sec}.${splitMiliseconds[1]}`);
 };
 
-export const getTime = (time: String): string => {
-  const splitSeconds = time.split(":");
-  const splitMiliseconds = splitSeconds[1].split(".");
-
-  const sec = Number(splitSeconds[0]) * 60 + Number(splitMiliseconds[0]);
-  return `${sec}.${splitMiliseconds[1]}`;
-}; 
+export const formatTime = (timeInSeconds: number): string => {
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = String((timeInSeconds % 60).toFixed(3)).padStart(6, "0");
+  return `${minutes}:${seconds}`;
+};
 
 export const getHsl = (value: number, range: number[], colors: string) => {
   if (value < range[0] || value > range[1]) {
@@ -34,23 +32,30 @@ export const getMedian = (laps: Array<number>): number => {
     const middle = laps.length / 2;
     return (laps[middle - 1] + laps[middle]) / 2;
   } else {
-    console.log("else")
     return laps[Math.round(laps.length / 2)];
   }
 };
 
 export const getRange = (laps: Array<string>, cutout: number): number[] => {
-  console.log("get range")
-  const timsesInSeconds = laps
-    .map((lap) => getSeconds(lap))
+  const timsesInSeconds = laps.map((lapTime) => getSeconds(lapTime));
 
-  const median = getMedian(timsesInSeconds)
-  console.log({median})
+  const median = Math.round(getMedian(timsesInSeconds));
 
-  const timesWthoutPitstops = timsesInSeconds
-    .filter((time) => time < median + cutout);
+  const timesWthoutPitstops = timsesInSeconds.filter(
+    (time) => time < median + cutout
+  );
 
-    console.log([Math.min(...timesWthoutPitstops), Math.max(...timesWthoutPitstops)])
   return [Math.min(...timesWthoutPitstops), Math.max(...timesWthoutPitstops)];
 };
 
+export const flatLapTimes = (race: Race): string[] => {
+  return race.data
+    .reduce((result, currentValue) => {
+      if (currentValue.timings) {
+        result.push(currentValue.timings as string[]);
+      }
+      return result;
+    }, [] as string[][])
+    .flat();
+  //return race.data.map((el) => el.timings).flat()
+};
