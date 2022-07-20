@@ -137,7 +137,10 @@ function App() {
             ></input>
           </div>
           <div className="settings-input">
-            <label>exclued times over: {formatTime(excludedTimes)}</label>
+            <label>
+              exclued times over: <br />
+              <b>{formatTime(excludedTimes)}</b>
+            </label>
             <input
               type="range"
               min="1"
@@ -181,6 +184,18 @@ function App() {
           </div>
         ) : null}
       </main>
+      <footer>
+        <p>
+          lap times data:{" "}
+          <a href="http://ergast.com/mrd/">http://ergast.com/mrd/</a>
+        </p>
+        <p>
+          inspiration:{" "}
+          <a href="https://www.reddit.com/r/formula1/comments/tps40h/2022_saudi_arabian_grand_prix_lap_time_heat_map/">
+            https://www.reddit.com/r/formula1/comments/tps40h/2022_saudi_arabian_grand_prix_lap_time_heat_map/
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }

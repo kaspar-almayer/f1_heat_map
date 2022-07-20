@@ -38,10 +38,11 @@ main {
   display: flex;
   flex-direction: column;
   margin-left: 50px;
+  padding-top: 30px;
 }
 
 .settings-input {
-  margin-top: 30px;
+  margin-bottom: 30px;
   margin-right: 100px;
 }
 
@@ -51,4 +52,9 @@ main {
 
 .race-input label{
   margin-right: 20px;
+}
+
+footer {
+  border-top: 2px solid gray;
+  padding: 10px 50px;
 }
