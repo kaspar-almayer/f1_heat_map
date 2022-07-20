@@ -23,6 +23,8 @@ function App() {
   const [race, setRace] = useState<Race | null>(null);
   const [racesList, setRacesList] = useState<RacesList>([]);
   const [range, setRange] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const [colors, setColors] = useState("150");
   const [cutout, setCutout] = useState("7");
@@ -43,12 +45,20 @@ function App() {
 
         if (races) {
           setRace(races[0] as Race);
+          setLoading(false);
         }
 
         if (allRaces) {
           setRacesList(allRaces);
         }
-      } catch (error) {}
+
+        if (error) {
+          throw error;
+        }
+      } catch (error) {
+        setLoading(false);
+        setError(true);
+      }
     };
 
     getData();
@@ -148,6 +158,11 @@ function App() {
             ></input>
           </div>
         </div>
+        {loading ? <p>loading...</p> : null}
+        {error ? (
+          <p>There was a problem with data, please try again later.</p>
+        ) : null}
+
         {race ? (
           <div className="columns-wrapper">
             {race.data.map(
