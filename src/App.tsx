@@ -107,7 +107,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <header className="main-header">
-        <h1>F1 heat map | {race?.race_name}</h1>
+        <h1>Lap times heat map | {race?.race_name}</h1>
         <div className="race-input">
           <label htmlFor="races">select race:</label>
           <select
