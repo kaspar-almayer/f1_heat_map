@@ -36,7 +36,7 @@ function App() {
         let { data: races, error } = await supabase
           .from("races")
           .select("*")
-          .eq("round", "11");
+          .eq("round", "12");
 
         let { data: allRaces, error: allRacesRrror } = await supabase
           .from("races")
