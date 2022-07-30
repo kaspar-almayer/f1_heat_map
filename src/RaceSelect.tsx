@@ -45,6 +45,10 @@ function RaceSelect({ race, setRace }: RaceSelectProps) {
         if (races) {
           setRace(races[0] as Race);
         }
+
+        if (error) {
+          throw error;
+        }
       } catch (error) {
         console.log(error);
       }
