@@ -8,9 +8,11 @@ import {
   formatTime,
   flatLapTimes,
 } from "./helpers";
-import Column from "./Column";
 import { supabase } from "./supabaseClient";
-import { Race, RacesList } from "./types";
+import { Race } from "./types";
+
+import Column from "./Column";
+import RaceSelect from "./RaceSelect";
 
 const calculateCutout = (laps: Array<string>, cutout: number) => {
   const timsesInSeconds = laps.map((lapTime) => getSeconds(lapTime));
@@ -21,7 +23,6 @@ const calculateCutout = (laps: Array<string>, cutout: number) => {
 
 function App() {
   const [race, setRace] = useState<Race | null>(null);
-  const [racesList, setRacesList] = useState<RacesList>([]);
   const [range, setRange] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -38,18 +39,9 @@ function App() {
           .select("*")
           .eq("round", "12");
 
-        let { data: allRaces, error: allRacesRrror } = await supabase
-          .from("races")
-          .select("id,short_name")
-          .order("round", { ascending: false });
-
         if (races) {
           setRace(races[0] as Race);
           setLoading(false);
-        }
-
-        if (allRaces) {
-          setRacesList(allRaces);
         }
 
         if (error) {
@@ -75,23 +67,6 @@ function App() {
     [race, cutout]
   );
 
-  const handleRaceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const getData = async () => {
-      try {
-        let { data: races, error } = await supabase
-          .from("races")
-          .select("*")
-          .eq("id", event?.currentTarget?.value);
-
-        if (races) {
-          setRace(races[0] as Race);
-        }
-      } catch (error) {}
-    };
-
-    getData();
-  };
-
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColors(event?.currentTarget?.value);
   };
@@ -108,21 +83,7 @@ function App() {
     <div className="app-wrapper">
       <header className="main-header">
         <h1>Lap times heat map | {race?.race_name}</h1>
-        <div className="race-input">
-          <label htmlFor="races">select race:</label>
-          <select
-            name="races"
-            id="races"
-            value={race?.id}
-            onChange={handleRaceChange}
-          >
-            {racesList.map((race) => (
-              <option key={race.id} value={race.id}>
-                {race.short_name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <RaceSelect race={race} setRace={setRace} />
       </header>
       <main>
         <div className="settings-wrapper">
