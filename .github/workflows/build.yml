@@ -5,13 +5,12 @@ name: build gh page
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,16 +19,20 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm run build
-    - run: git config user.name github-actions
-    - run: git config user.email kaspar_almayer@protonmail.com
-    - run: git add .
-    - run: git commit -m "deploy files" 
-    - run: git push origin gh-pages
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: git config user.name github-actions
+      - run: git config user.email kaspar_almayer@protonmail.com
+      - run: git checkout gh-pages
+      - run: git rebase main
+      - run: npm install
+      - run: npm run build
+      - run: git add .
+      - run: git commit -m "deploy files"
+      - run: git push origin gh-pages
