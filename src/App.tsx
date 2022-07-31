@@ -82,7 +82,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <header className="main-header">
-        <h1>🏁 🏁 🏁 Lap times heat map | {race?.race_name}</h1>
+        <h1>🏁 Lap times heat map | {race?.race_name}</h1>
         <RaceSelect race={race} setRace={setRace} />
       </header>
       <main>
@@ -148,12 +148,28 @@ function App() {
       <footer>
         <p>
           lap times data:{" "}
-          <a href="http://ergast.com/mrd/">http://ergast.com/mrd/</a>
+          <a href="http://ergast.com/mrd/" target="_blank" rel="noreferrer">
+            http://ergast.com/mrd/
+          </a>
         </p>
         <p>
           inspiration:{" "}
-          <a href="https://www.reddit.com/r/formula1/comments/tps40h/2022_saudi_arabian_grand_prix_lap_time_heat_map/">
+          <a
+            href="https://www.reddit.com/r/formula1/comments/tps40h/2022_saudi_arabian_grand_prix_lap_time_heat_map/"
+            target="_blank"
+            rel="noreferrer"
+          >
             https://www.reddit.com/r/formula1/comments/tps40h/2022_saudi_arabian_grand_prix_lap_time_heat_map/
+          </a>
+        </p>
+        <p>
+          <b>made by:</b>{" "}
+          <a
+            href="https://twitter.com/kaspar_almayer"
+            target="_blank"
+            rel="noreferrer"
+          >
+            @kaspar_almayer
           </a>
         </p>
       </footer>
