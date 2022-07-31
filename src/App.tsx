@@ -82,7 +82,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <header className="main-header">
-        <h1>🏁 Lap times heat map | {race?.race_name}</h1>
+        <h1>🏁 🏁 🏁 Lap times heat map | {race?.race_name}</h1>
         <RaceSelect race={race} setRace={setRace} />
       </header>
       <main>
