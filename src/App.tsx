@@ -37,7 +37,7 @@ function App() {
         let { data: races, error } = await supabase
           .from("races")
           .select("*")
-          .eq("round", "12");
+          .eq("round", "13");
 
         if (races) {
           setRace(races[0] as Race);
