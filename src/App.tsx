@@ -67,6 +67,14 @@ function App() {
     [race, cutout]
   );
 
+  const fastestLap = useMemo(
+    () =>
+      race
+        ? Math.min(...flatLapTimes(race).map((lapTime) => getSeconds(lapTime)))
+        : 0,
+    [race]
+  );
+
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColors(event?.currentTarget?.value);
   };
@@ -82,7 +90,9 @@ function App() {
   return (
     <div className="app-wrapper">
       <header className="main-header">
-        <h1>🏁 Lap times heat map | {race?.race_name}</h1>
+        <h1>
+          🏁 Lap times heat map | {race?.race_name} {fastestLap}
+        </h1>
         <RaceSelect race={race} setRace={setRace} />
       </header>
       <main>
@@ -121,6 +131,7 @@ function App() {
               onChange={handleSizeChange}
             ></input>
           </div>
+          <span className="fastest-lap">fastest lap</span>
         </div>
         {loading ? <p>loading...</p> : null}
         {error ? (
@@ -139,6 +150,7 @@ function App() {
                     driver={el.driver}
                     colors={colors}
                     fontSize={fontSize}
+                    fastestLap={fastestLap}
                   />
                 )
             )}

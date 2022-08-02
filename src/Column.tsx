@@ -8,9 +8,21 @@ type ColumnProps = {
   driver: string;
   colors: string;
   fontSize: string;
+  fastestLap: number;
 };
 
-const Column = ({ laps, range, driver, colors, fontSize }: ColumnProps) => {
+const Column = ({
+  laps,
+  range,
+  driver,
+  colors,
+  fontSize,
+  fastestLap,
+}: ColumnProps) => {
+  const color = (lap: string, fastestLap: number) =>
+    getSeconds(lap) === fastestLap
+      ? "magenta"
+      : getHsl(getSeconds(lap), range, colors);
   return (
     <div className="column">
       <p className="driver-name">{driver}</p>
@@ -18,7 +30,7 @@ const Column = ({ laps, range, driver, colors, fontSize }: ColumnProps) => {
         <p
           key={index}
           style={{
-            backgroundColor: getHsl(getSeconds(lap), range, colors),
+            backgroundColor: `${color(lap, fastestLap)}`,
             fontSize: `${fontSize}px`,
           }}
         >

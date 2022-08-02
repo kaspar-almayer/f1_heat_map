@@ -39,6 +39,8 @@ main {
   flex-direction: column;
   margin-left: 50px;
   padding-top: 30px;
+  align-items: flex-start;
+  margin-bottom: 30px;
 }
 
 .settings-input {
@@ -57,4 +59,9 @@ main {
 footer {
   border-top: 2px solid gray;
   padding: 10px 50px;
+}
+
+.fastest-lap {
+  background-color: magenta;
+  padding: 2px;
 }
