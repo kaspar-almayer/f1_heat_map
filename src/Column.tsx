@@ -31,6 +31,7 @@ const Column = ({
         {isFirst
           ? laps.map((lap, index) => (
               <p
+                key={index}
                 style={{
                   fontSize: `${fontSize}px`,
                 }}
