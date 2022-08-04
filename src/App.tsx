@@ -149,6 +149,7 @@ function App() {
                     colors={colors}
                     fontSize={fontSize}
                     fastestLap={fastestLap}
+                    isFirst={index === 0}
                   />
                 )
             )}

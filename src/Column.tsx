@@ -9,6 +9,7 @@ type ColumnProps = {
   colors: string;
   fontSize: string;
   fastestLap: number;
+  isFirst: boolean;
 };
 
 const Column = ({
@@ -18,6 +19,7 @@ const Column = ({
   colors,
   fontSize,
   fastestLap,
+  isFirst,
 }: ColumnProps) => {
   const color = (lap: string, fastestLap: number) =>
     getSeconds(lap) === fastestLap
@@ -25,6 +27,19 @@ const Column = ({
       : getHsl(getSeconds(lap), range, colors);
   return (
     <div className="column">
+      <div className="lap-numbers">
+        {isFirst
+          ? laps.map((lap, index) => (
+              <p
+                style={{
+                  fontSize: `${fontSize}px`,
+                }}
+              >
+                {index + 1}
+              </p>
+            ))
+          : null}
+      </div>
       <p className="driver-name">{driver}</p>
       {laps.map((lap, index) => (
         <p

@@ -22,11 +22,25 @@ main {
 .column {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .column p {
   margin: 0;
   padding: .2em;
+}
+
+.lap-numbers {
+  position: absolute;
+  top: 1.8em;
+  right: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.lap-numbers p {
+  padding: .2em .4em;
 }
 
 .driver-name {
