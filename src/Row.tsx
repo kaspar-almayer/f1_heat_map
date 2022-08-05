@@ -3,7 +3,7 @@ import "./App.css";
 import { getHsl, getSeconds } from "./helpers";
 import { TimingsData } from "./types";
 
-type ColumnProps = {
+type RowProps = {
   timingsData: TimingsData;
   range: Array<number>;
   colors: string;
@@ -14,7 +14,7 @@ type ColumnProps = {
   selectedDrivers: TimingsData[];
 };
 
-const Column = ({
+const Row = ({
   range,
   timingsData,
   colors,
@@ -23,7 +23,7 @@ const Column = ({
   isFirst,
   setSelectedDrivers,
   selectedDrivers,
-}: ColumnProps) => {
+}: RowProps) => {
   const color = (lap: string, fastestLap: number) =>
     getSeconds(lap) === fastestLap
       ? "magenta"
@@ -34,8 +34,8 @@ const Column = ({
     setSelectedDrivers([...selectedDrivers, timingsData]);
   };
   return (
-    <div className="column">
-      <div className="lap-numbers">
+    <div className="row">
+      {/* <div className="lap-numbers">
         {isFirst
           ? timingsData.timings.map((lap, index) => (
               <p
@@ -48,23 +48,26 @@ const Column = ({
               </p>
             ))
           : null}
-      </div>
+      </div> */}
       <p className="driver-name" onClick={handleDriverSelect}>
         {timingsData.driver}
       </p>
-      {timingsData.timings.map((lap, index) => (
-        <p
-          key={index}
-          style={{
-            backgroundColor: `${color(lap, fastestLap)}`,
-            fontSize: `${fontSize}px`,
-          }}
-        >
-          {lap}
-        </p>
-      ))}
+      <div className="row-timings-wrapper">
+        {timingsData.timings.map((lap, index) => (
+          <p
+            className="row-cell"
+            key={index}
+            style={{
+              backgroundColor: `${color(lap, fastestLap)}`,
+              fontSize: `${fontSize}px`,
+            }}
+          >
+            <span>{lap}</span>
+          </p>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default Column;
+export default Row;

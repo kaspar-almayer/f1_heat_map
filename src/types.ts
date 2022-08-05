@@ -2,7 +2,7 @@ export type TimingsData = {
   driver: string;
   driverId: string;
   timings: string[];
-}[];
+};
 
 export type Race = {
   created_at: string;
@@ -10,7 +10,7 @@ export type Race = {
   race_name: string;
   round: number;
   short_name: string;
-  data: TimingsData;
+  data: TimingsData[];
 };
 
 export type RacesList = {
