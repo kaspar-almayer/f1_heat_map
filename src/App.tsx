@@ -9,10 +9,11 @@ import {
   flatLapTimes,
 } from "./helpers";
 import { supabase } from "./supabaseClient";
-import { Race } from "./types";
+import { Race, TimingsData } from "./types";
 
 import Column from "./Column";
 import RaceSelect from "./RaceSelect";
+import DriverComparison from "./DriverComparison";
 
 const calculateCutout = (laps: Array<string>, cutout: number) => {
   const timsesInSeconds = laps.map((lapTime) => getSeconds(lapTime));
@@ -26,6 +27,7 @@ function App() {
   const [range, setRange] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [selectedDrivers, setSelectedDrivers] = useState<TimingsData[]>([]);
 
   const [colors, setColors] = useState("150");
   const [cutout, setCutout] = useState("7");
@@ -74,6 +76,19 @@ function App() {
         : 0,
     [race]
   );
+
+  const showComparison = useMemo(
+    () => selectedDrivers.length === 2,
+    [selectedDrivers]
+  );
+
+  useEffect(() => {
+    if (selectedDrivers.length === 2) {
+      document.body.classList.add("overflow");
+    } else {
+      document.body.classList.remove("overflow");
+    }
+  }, [selectedDrivers]);
 
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColors(event?.currentTarget?.value);
@@ -139,21 +154,33 @@ function App() {
         {race ? (
           <div className="columns-wrapper">
             {race.data.map(
-              (el, index) =>
-                el.timings && (
+              (data, index) =>
+                data.timings && (
                   <Column
                     key={index}
-                    laps={el.timings}
+                    timingsData={data}
                     range={range}
-                    driver={el.driver}
                     colors={colors}
                     fontSize={fontSize}
                     fastestLap={fastestLap}
                     isFirst={index === 0}
+                    setSelectedDrivers={setSelectedDrivers}
+                    selectedDrivers={selectedDrivers}
                   />
                 )
             )}
           </div>
+        ) : null}
+
+        {showComparison ? (
+          <DriverComparison
+            setSelectedDrivers={setSelectedDrivers}
+            selectedDrivers={selectedDrivers}
+            range={range}
+            colors={colors}
+            fontSize={"12"}
+            fastestLap={fastestLap}
+          />
         ) : null}
       </main>
       <footer>
