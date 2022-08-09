@@ -1,5 +1,6 @@
 import React from "react";
-import "./App.css";
+import styled from "styled-components";
+
 import { TimingsData, DriversFullNames } from "./types";
 
 import Row from "./Row";
@@ -24,13 +25,10 @@ const DriverComparison = ({
   const handleCloseComparisonOverlay = () => setSelectedDrivers([]);
 
   return (
-    <div className="comparison-overlay">
-      <span
-        className="comparison-overlay__close"
-        onClick={handleCloseComparisonOverlay}
-      >
+    <StyledComparisonOverlay>
+      <StyledOverlayClose onClick={handleCloseComparisonOverlay}>
         X
-      </span>
+      </StyledOverlayClose>
       <h2>
         {
           DriversFullNames[
@@ -44,7 +42,7 @@ const DriverComparison = ({
           ]
         }
       </h2>
-      <div className="rows-wrapper">
+      <StyledRowsWrapper>
         {selectedDrivers.map(
           (data, index) =>
             data.timings && (
@@ -59,9 +57,32 @@ const DriverComparison = ({
               />
             )
         )}
-      </div>
-    </div>
+      </StyledRowsWrapper>
+    </StyledComparisonOverlay>
   );
 };
+
+const StyledComparisonOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  text-align: center;
+  flex-direction: column;
+`;
+
+const StyledOverlayClose = styled.span`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+`;
+
+const StyledRowsWrapper = styled.div`
+  margin: 0 30px;
+`;
 
 export default DriverComparison;

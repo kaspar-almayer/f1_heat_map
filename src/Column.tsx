@@ -1,5 +1,6 @@
 import React from "react";
-import "./App.css";
+import styled from "styled-components";
+
 import { getHsl, getSeconds } from "./helpers";
 import { TimingsData } from "./types";
 
@@ -30,12 +31,11 @@ const Column = ({
       : getHsl(getSeconds(lap), range, colors);
 
   const handleDriverSelect = () => {
-    console.log("driver selected");
     setSelectedDrivers([...selectedDrivers, timingsData]);
   };
   return (
-    <div className="column">
-      <div className="lap-numbers">
+    <StyledColumn>
+      <StyledLapNumbers>
         {isFirst
           ? timingsData.timings.map((lap, index) => (
               <p
@@ -48,7 +48,7 @@ const Column = ({
               </p>
             ))
           : null}
-      </div>
+      </StyledLapNumbers>
       <div
         className={
           selectedDrivers[0]?.driver === timingsData.driver
@@ -56,9 +56,9 @@ const Column = ({
             : ""
         }
       >
-        <p className="driver-name" onClick={handleDriverSelect}>
+        <StyledDriverName onClick={handleDriverSelect}>
           {timingsData.driver}
-        </p>
+        </StyledDriverName>
         {timingsData.timings.map((lap, index) => (
           <p
             key={index}
@@ -71,8 +71,36 @@ const Column = ({
           </p>
         ))}
       </div>
-    </div>
+    </StyledColumn>
   );
 };
+
+const StyledColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  p {
+    margin: 0;
+    padding: 0.2em;
+  }
+`;
+
+const StyledLapNumbers = styled.div`
+  position: absolute;
+  top: 1.8em;
+  right: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  p {
+    padding: 0.2em 0.4em;
+  }
+`;
+
+const StyledDriverName = styled.div`
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+`;
 
 export default Column;

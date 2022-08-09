@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import styled from "styled-components";
 
 import "./App.css";
 import {
@@ -152,7 +153,7 @@ function App() {
         ) : null}
 
         {race ? (
-          <div className="columns-wrapper">
+          <StyledColumnWrapper>
             {race.data.map(
               (data, index) =>
                 data.timings && (
@@ -169,7 +170,7 @@ function App() {
                   />
                 )
             )}
-          </div>
+          </StyledColumnWrapper>
         ) : null}
 
         {showComparison ? (
@@ -214,5 +215,10 @@ function App() {
     </div>
   );
 }
+
+const StyledColumnWrapper = styled.div`
+  display: flex;
+  margin-bottom: 50px;
+`;
 
 export default App;

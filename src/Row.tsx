@@ -1,5 +1,6 @@
 import React from "react";
-import "./App.css";
+import styled from "styled-components";
+
 import { getHsl, getSeconds } from "./helpers";
 import { TimingsData } from "./types";
 
@@ -26,11 +27,11 @@ const Row = ({
       : getHsl(getSeconds(lap), range, colors);
 
   return (
-    <div className="row">
-      {!isLast && <p className="row-driver-name">{timingsData.driver}</p>}
-      <div className="row-timings-wrapper">
+    <StyledRow>
+      {!isLast && <StyledDriverName>{timingsData.driver}</StyledDriverName>}
+      <StyledTimingsWrapper>
         {timingsData.timings.map((lap, index) => (
-          <p
+          <StyledRowCell
             className="row-cell"
             key={index}
             style={{
@@ -39,12 +40,37 @@ const Row = ({
             }}
           >
             <span>{lap}</span>
-          </p>
+          </StyledRowCell>
         ))}
-      </div>
-      {isLast && <p className="row-driver-name">{timingsData.driver}</p>}
-    </div>
+      </StyledTimingsWrapper>
+      {isLast && <StyledDriverName>{timingsData.driver}</StyledDriverName>}
+    </StyledRow>
   );
 };
+
+const StyledRow = styled.div``;
+
+const StyledTimingsWrapper = styled.div`
+  display: flex;
+`;
+
+const StyledRowCell = styled.p`
+  width: 2em;
+  height: 65px;
+  position: relative;
+  span {
+    transform: rotate(-90deg);
+    position: absolute;
+    z-index: 1;
+    top: 2em;
+    right: -1em;
+  }
+`;
+
+const StyledDriverName = styled.p`
+  font-weight: bold;
+  text-align: left;
+  margin: 0;
+`;
 
 export default Row;

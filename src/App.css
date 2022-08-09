@@ -13,48 +13,11 @@ main {
   margin-top: 30px;
 }
 
-
-.columns-wrapper {
-  display: flex;
-  margin-bottom: 50px;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.column p {
-  margin: 0;
-  padding: .2em;
-}
-
 .column-selected {
   border-right: 2px solid black;
   border-left: 2px solid black;
   box-shadow: inset 0px 4px 0px -2px black;
 }
-
-.lap-numbers {
-  position: absolute;
-  top: 1.8em;
-  right: 100%;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-}
-
-.lap-numbers p {
-  padding: .2em .4em;
-}
-
-.driver-name {
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
-}
-
 
 
 .settings-wrapper {
@@ -89,54 +52,6 @@ footer {
   padding: 2px;
 }
 
-
-.comparison-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: white;
-  text-align: center;
-  flex-direction: column;
-}
-
-.comparison-overlay__close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-
-.rows-wrapper {
-  margin: 0 30px;
-}
-
-.row-driver-name {
-  font-weight: bold;
-  text-align: left;
-  margin: 0;
-}
-
-.row-timings-wrapper {
-  display: flex;
-
-}
-.row-cell {
-  width: 2em;
-  height: 65px;
-  position: relative;
-}
-.row-cell span {
-  transform: rotate(-90deg);
-  position: absolute;
-  z-index: 1;
-  top: 2em;
-  right: -1em;
-
-}
 
 .overflow {
   overflow: hidden;
