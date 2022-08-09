@@ -10,7 +10,6 @@ type ColumnProps = {
   colors: string;
   fontSize: string;
   fastestLap: number;
-  isFirst: boolean;
   setSelectedDrivers: Function;
   selectedDrivers: TimingsData[];
 };
@@ -21,7 +20,6 @@ const Column = ({
   colors,
   fontSize,
   fastestLap,
-  isFirst,
   setSelectedDrivers,
   selectedDrivers,
 }: ColumnProps) => {
@@ -34,48 +32,32 @@ const Column = ({
     setSelectedDrivers([...selectedDrivers, timingsData]);
   };
   return (
-    <StyledColumn>
-      <StyledLapNumbers>
-        {isFirst
-          ? timingsData.timings.map((lap, index) => (
-              <p
-                key={index}
-                style={{
-                  fontSize: `${fontSize}px`,
-                }}
-              >
-                {index + 1}
-              </p>
-            ))
-          : null}
-      </StyledLapNumbers>
-      <div
-        className={
-          selectedDrivers[0]?.driver === timingsData.driver
-            ? "column-selected"
-            : ""
-        }
-      >
-        <StyledDriverName onClick={handleDriverSelect}>
-          {timingsData.driver}
-        </StyledDriverName>
-        {timingsData.timings.map((lap, index) => (
-          <p
-            key={index}
-            style={{
-              backgroundColor: `${color(lap, fastestLap)}`,
-              fontSize: `${fontSize}px`,
-            }}
-          >
-            {lap}
-          </p>
-        ))}
-      </div>
+    <StyledColumn
+      isSelected={selectedDrivers[0]?.driver === timingsData.driver}
+    >
+      <StyledDriverName onClick={handleDriverSelect}>
+        {timingsData.driver}
+      </StyledDriverName>
+      {timingsData.timings.map((lap, index) => (
+        <p
+          key={index}
+          style={{
+            backgroundColor: `${color(lap, fastestLap)}`,
+            fontSize: `${fontSize}px`,
+          }}
+        >
+          {lap}
+        </p>
+      ))}
     </StyledColumn>
   );
 };
 
-const StyledColumn = styled.div`
+interface StyledColumnProps {
+  readonly isSelected: boolean;
+}
+
+const StyledColumn = styled.div<StyledColumnProps>`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -83,18 +65,10 @@ const StyledColumn = styled.div`
     margin: 0;
     padding: 0.2em;
   }
-`;
-
-const StyledLapNumbers = styled.div`
-  position: absolute;
-  top: 1.8em;
-  right: 100%;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  p {
-    padding: 0.2em 0.4em;
-  }
+  border-right: ${(props) => (props.isSelected ? "2px solid black" : "none")};
+  border-left: ${(props) => (props.isSelected ? "2px solid black" : "none")};
+  box-shadow: ${(props) =>
+    props.isSelected ? "inset 0px 4px 0px -2px black" : "none"};
 `;
 
 const StyledDriverName = styled.div`

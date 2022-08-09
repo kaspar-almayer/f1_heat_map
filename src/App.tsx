@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 
-import "./App.css";
 import {
   getRange,
   getMedian,
@@ -93,9 +92,9 @@ function App() {
   }, [selectedDrivers]);
 
   return (
-    <div className="app-wrapper">
+    <>
       <Header race={race} setRace={setRace} />
-      <main>
+      <StyledMain>
         <Settings
           colors={colors}
           cutout={cutout}
@@ -111,7 +110,14 @@ function App() {
         ) : null}
 
         {race ? (
-          <StyledColumnWrapper>
+          <StyledHeatMapWrapper>
+            <StyledLapNumbersWrapper>
+              {race.data[0].timings.map((lap, index) => (
+                <StyledLapNumber key={index} fontSize={fontSize}>
+                  {index + 1}
+                </StyledLapNumber>
+              ))}
+            </StyledLapNumbersWrapper>
             {race.data.map(
               (data, index) =>
                 data.timings && (
@@ -122,13 +128,12 @@ function App() {
                     colors={colors}
                     fontSize={fontSize}
                     fastestLap={fastestLap}
-                    isFirst={index === 0}
                     setSelectedDrivers={setSelectedDrivers}
                     selectedDrivers={selectedDrivers}
                   />
                 )
             )}
-          </StyledColumnWrapper>
+          </StyledHeatMapWrapper>
         ) : null}
 
         {showComparison ? (
@@ -141,15 +146,42 @@ function App() {
             fastestLap={fastestLap}
           />
         ) : null}
-      </main>
+      </StyledMain>
       <Footer />
-    </div>
+    </>
   );
 }
 
-const StyledColumnWrapper = styled.div`
+interface StyledLapNumberProps {
+  readonly fontSize: string;
+}
+
+const StyledMain = styled.main`
+  display: flex;
+  margin-top: 30px;
+`;
+
+const StyledHeatMapWrapper = styled.div`
   display: flex;
   margin-bottom: 50px;
+  position: relative;
+`;
+
+const StyledLapNumbersWrapper = styled.div`
+  position: absolute;
+  top: 1.3em;
+  right: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  p {
+    padding: 0.2em 0.4em;
+    margin: 0;
+  }
+`;
+
+const StyledLapNumber = styled.p<StyledLapNumberProps>`
+  font-size: ${(props) => `${props.fontSize}px`};
 `;
 
 export default App;

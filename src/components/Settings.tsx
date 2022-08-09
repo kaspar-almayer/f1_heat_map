@@ -69,7 +69,7 @@ const Settings = ({
           onChange={handleSizeChange}
         ></input>
       </StyledSettingsInput>
-      <span className="fastest-lap">fastest lap</span>
+      <StyledFastestLapLabel>fastest lap</StyledFastestLapLabel>
     </StyledSettingsWrapper>
   );
 };
@@ -89,6 +89,11 @@ const StyledSettingsInput = styled.div`
   label {
     display: block;
   }
+`;
+
+const StyledFastestLapLabel = styled.span`
+  background-color: magenta;
+  padding: 2px;
 `;
 
 export default Settings;
