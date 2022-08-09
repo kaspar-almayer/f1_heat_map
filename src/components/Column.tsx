@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getHsl, getSeconds } from "./helpers";
-import { TimingsData } from "./types";
+import { getHsl, getSeconds } from "../helpers/helpers";
+import { TimingsData } from "../helpers/types";
 
 type ColumnProps = {
   timingsData: TimingsData;

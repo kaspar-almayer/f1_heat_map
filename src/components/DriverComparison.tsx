@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TimingsData, DriversFullNames } from "./types";
+import { TimingsData, DriversFullNames } from "../helpers/types";
 
 import Row from "./Row";
 

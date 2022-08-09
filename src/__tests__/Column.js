@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Column from "../Column";
+import Column from "../components/Column";
 
 test("display driver name and lap time", () => {
   render(

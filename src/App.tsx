@@ -6,15 +6,16 @@ import {
   getRange,
   getMedian,
   getSeconds,
-  formatTime,
   flatLapTimes,
-} from "./helpers";
-import { supabase } from "./supabaseClient";
-import { Race, TimingsData } from "./types";
+} from "./helpers/helpers";
+import { supabase } from "./helpers/supabaseClient";
+import { Race, TimingsData } from "./helpers/types";
 
-import Column from "./Column";
-import RaceSelect from "./RaceSelect";
-import DriverComparison from "./DriverComparison";
+import Column from "./components/Column";
+import DriverComparison from "./components/DriverComparison";
+import Footer from "./components/Footer";
+import Settings from "./components/Settings";
+import Header from "./components/Header";
 
 const calculateCutout = (laps: Array<string>, cutout: number) => {
   const timsesInSeconds = laps.map((lapTime) => getSeconds(lapTime));
@@ -91,62 +92,19 @@ function App() {
     }
   }, [selectedDrivers]);
 
-  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setColors(event?.currentTarget?.value);
-  };
-
-  const handleCutoutChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCutout(event?.currentTarget?.value);
-  };
-
-  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFontSize(event?.currentTarget?.value);
-  };
-
   return (
     <div className="app-wrapper">
-      <header className="main-header">
-        <h1>🏁 Lap times heat map | {race?.race_name}</h1>
-        <RaceSelect race={race} setRace={setRace} />
-      </header>
+      <Header race={race} setRace={setRace} />
       <main>
-        <div className="settings-wrapper">
-          <div className="settings-input">
-            <label>adjust colors:</label>
-            <input
-              type="range"
-              min="0"
-              max="300"
-              value={colors}
-              onChange={handleColorChange}
-            ></input>
-          </div>
-          <div className="settings-input">
-            <label>
-              exclued times over: <br />
-              <b>{formatTime(excludedTimes)}</b>
-            </label>
-            <input
-              type="range"
-              min="1"
-              max="30"
-              value={cutout}
-              onChange={handleCutoutChange}
-            ></input>
-          </div>
-
-          <div className="settings-input">
-            <label>heat map size: {fontSize}</label>
-            <input
-              type="range"
-              min="7"
-              max="20"
-              value={fontSize}
-              onChange={handleSizeChange}
-            ></input>
-          </div>
-          <span className="fastest-lap">fastest lap</span>
-        </div>
+        <Settings
+          colors={colors}
+          cutout={cutout}
+          fontSize={fontSize}
+          setColors={setColors}
+          setCutout={setCutout}
+          setFontSize={setFontSize}
+          excludedTimes={excludedTimes}
+        />
         {loading ? <p>loading...</p> : null}
         {error ? (
           <p>There was a problem with data, please try again later.</p>
@@ -184,34 +142,7 @@ function App() {
           />
         ) : null}
       </main>
-      <footer>
-        <p>
-          lap times data:{" "}
-          <a href="http://ergast.com/mrd/" target="_blank" rel="noreferrer">
-            http://ergast.com/mrd/
-          </a>
-        </p>
-        <p>
-          inspiration:{" "}
-          <a
-            href="https://www.reddit.com/r/formula1/comments/tps40h/2022_saudi_arabian_grand_prix_lap_time_heat_map/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            https://www.reddit.com/r/formula1/comments/tps40h/2022_saudi_arabian_grand_prix_lap_time_heat_map/
-          </a>
-        </p>
-        <p>
-          <b>made by:</b>{" "}
-          <a
-            href="https://twitter.com/kaspar_almayer"
-            target="_blank"
-            rel="noreferrer"
-          >
-            @kaspar_almayer
-          </a>
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 
-import { supabase } from "./supabaseClient";
-import { Race, RacesList } from "./types";
+import { supabase } from "../helpers/supabaseClient";
+import { Race, RacesList } from "../helpers/types";
 
 type RaceSelectProps = {
   race: Race | null;
@@ -60,8 +61,10 @@ function RaceSelect({ race, setRace }: RaceSelectProps) {
   return (
     <>
       {racesList.length ? (
-        <div className="race-input">
-          <label htmlFor="races">select race:</label>
+        <>
+          <StyledRaceSelectLabel htmlFor="races">
+            select race:
+          </StyledRaceSelectLabel>
           <select
             name="races"
             id="races"
@@ -74,10 +77,14 @@ function RaceSelect({ race, setRace }: RaceSelectProps) {
               </option>
             ))}
           </select>
-        </div>
+        </>
       ) : null}
     </>
   );
 }
+
+const StyledRaceSelectLabel = styled.label`
+  margin-right: 20px;
+`;
 
 export default RaceSelect;
