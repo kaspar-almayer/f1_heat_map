@@ -36,11 +36,11 @@ const DriverComparison = ({
           ]
         }{" "}
         vs.{" "}
-        {
+        {/* {
           DriversFullNames[
             selectedDrivers[1].driver as keyof typeof DriversFullNames
           ]
-        }
+        } */}
       </h2>
       <StyledRowsWrapper>
         {selectedDrivers.map(

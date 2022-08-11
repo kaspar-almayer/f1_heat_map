@@ -79,7 +79,7 @@ function App() {
   );
 
   const showComparison = useMemo(
-    () => selectedDrivers.length === 2,
+    () => selectedDrivers.length === 1,
     [selectedDrivers]
   );
 
