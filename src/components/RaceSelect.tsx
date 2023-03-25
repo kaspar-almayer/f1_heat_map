@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { supabase } from "../helpers/supabaseClient";
 import { Race, RacesList } from "../helpers/types";
 
 type RaceSelectProps = {
