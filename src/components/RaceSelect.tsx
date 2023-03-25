@@ -15,18 +15,10 @@ function RaceSelect({ race, setRace }: RaceSelectProps) {
   useEffect(() => {
     const getData = async () => {
       try {
-        let { data, error } = await supabase
-          .from("races")
-          .select("id,short_name")
-          .order("round", { ascending: false });
-
-        if (data) {
-          setRacesList(data);
-        }
-
-        if (error) {
-          throw error;
-        }
+        setRacesList([
+          {id: 1, short_name: "Bahrain GP"},
+          {id: 2, short_name: "Saudi Arabian GP"}
+        ])
       } catch (error) {
         console.log(error);
       }
@@ -38,18 +30,10 @@ function RaceSelect({ race, setRace }: RaceSelectProps) {
   const handleRaceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const getData = async () => {
       try {
-        let { data: races, error } = await supabase
-          .from("races")
-          .select("*")
-          .eq("id", event?.currentTarget?.value);
-
-        if (races) {
-          setRace(races[0] as Race);
-        }
-
-        if (error) {
-          throw error;
-        }
+        const response = await fetch(`https://kaspar-almayer.github.io/f1_data/${event?.currentTarget?.value}.json`);
+        const jsonData = await response.json()
+        console.log(jsonData)
+        setRace(jsonData as Race);
       } catch (error) {
         console.log(error);
       }

@@ -7,7 +7,6 @@ import {
   getSeconds,
   flatLapTimes,
 } from "./helpers/helpers";
-import { supabase } from "./helpers/supabaseClient";
 import { Race, TimingsData } from "./helpers/types";
 
 import Column from "./components/Column";
@@ -36,20 +35,14 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
+
       try {
-        let { data: races, error } = await supabase
-          .from("races")
-          .select("*")
-          .eq("round", "16");
+        const response = await fetch('https://kaspar-almayer.github.io/f1_data/1.json');
+        const jsonData = await response.json()
+        console.log(jsonData)
+        setRace(jsonData as Race);
+        setLoading(false);
 
-        if (races) {
-          setRace(races[0] as Race);
-          setLoading(false);
-        }
-
-        if (error) {
-          throw error;
-        }
       } catch (error) {
         setLoading(false);
         setError(true);
