@@ -6,6 +6,7 @@ import {
   getMedian,
   getSeconds,
   flatLapTimes,
+  getRace,
 } from "./helpers/helpers";
 import { Race, TimingsData } from "./helpers/types";
 
@@ -37,10 +38,8 @@ function App() {
     const getData = async () => {
 
       try {
-        const response = await fetch('https://kaspar-almayer.github.io/f1_data/1.json');
-        const jsonData = await response.json()
-        console.log(jsonData)
-        setRace(jsonData as Race);
+        const raceData = await getRace('1');
+        setRace(raceData);
         setLoading(false);
 
       } catch (error) {

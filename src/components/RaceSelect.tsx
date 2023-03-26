@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import { Race, RacesList } from "../helpers/types";
+import { Race } from "../helpers/types";
+import { getRace, RACE_LIST } from "../helpers/helpers";
 
 type RaceSelectProps = {
   race: Race | null;
@@ -9,30 +10,12 @@ type RaceSelectProps = {
 };
 
 function RaceSelect({ race, setRace }: RaceSelectProps) {
-  const [racesList, setRacesList] = useState<RacesList>([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        setRacesList([
-          {id: 1, short_name: "Bahrain GP"},
-          {id: 2, short_name: "Saudi Arabian GP"}
-        ])
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getData();
-  }, []);
 
   const handleRaceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const getData = async () => {
       try {
-        const response = await fetch(`https://kaspar-almayer.github.io/f1_data/${event?.currentTarget?.value}.json`);
-        const jsonData = await response.json()
-        console.log(jsonData)
-        setRace(jsonData as Race);
+        const raceData = await getRace(event?.currentTarget?.value);
+        setRace(raceData);
       } catch (error) {
         console.log(error);
       }
@@ -43,25 +26,21 @@ function RaceSelect({ race, setRace }: RaceSelectProps) {
 
   return (
     <>
-      {racesList.length ? (
-        <>
-          <StyledRaceSelectLabel htmlFor="races">
-            select race:
-          </StyledRaceSelectLabel>
-          <select
-            name="races"
-            id="races"
-            value={race?.id}
-            onChange={handleRaceChange}
-          >
-            {racesList.map((race) => (
-              <option key={race.id} value={race.id}>
-                {race.short_name}
-              </option>
-            ))}
-          </select>
-        </>
-      ) : null}
+      <StyledRaceSelectLabel htmlFor="races">
+        select race:
+      </StyledRaceSelectLabel>
+      <select
+        name="races"
+        id="races"
+        value={race?.id}
+        onChange={handleRaceChange}
+      >
+        {RACE_LIST.map((race) => (
+          <option key={race.id} value={race.id}>
+            {race.short_name}
+          </option>
+        ))}
+      </select>
     </>
   );
 }

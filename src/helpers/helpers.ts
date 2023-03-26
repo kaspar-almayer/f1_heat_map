@@ -59,3 +59,14 @@ export const flatLapTimes = (race: Race): string[] => {
     .flat();
   //return race.data.map((el) => el.timings).flat()
 };
+
+export const getRace = async (id: string): Promise<Race> => {
+  const response = await fetch(`https://kaspar-almayer.github.io/f1_data/${id}.json`);
+  const jsonData = await response.json()
+  return jsonData;
+};
+
+export const RACE_LIST = [
+  {id: 1, short_name: "Bahrain GP"},
+  {id: 2, short_name: "Saudi Arabian GP"}
+]
