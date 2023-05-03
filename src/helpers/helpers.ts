@@ -68,5 +68,7 @@ export const getRace = async (id: string): Promise<Race> => {
 
 export const RACE_LIST = [
   {id: 1, short_name: "Bahrain GP"},
-  {id: 2, short_name: "Saudi Arabian GP"}
+  {id: 2, short_name: "Saudi Arabian GP"},
+  {id: 3, short_name: "Australia GP"},
+  {id: 4, short_name: "Azerbaijan GP"},
 ]
